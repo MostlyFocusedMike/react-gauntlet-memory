@@ -24,10 +24,11 @@ const scrambleNums = (totalPairs: number, isLiveMode = true) => {
 };
 
 export default function App() {
+  const [numOfPairs] = useState(8);
   const [score, setScore] = useState(0);
   const [firstGuess, setFirstGuess] = useState<Card | null>(null);
-  const [cards, setCards] = useState(scrambleNums(10));
-  const [remainingPairs, setRemainingPairs] = useState(10);
+  const [cards, setCards] = useState(scrambleNums(numOfPairs));
+  const [remainingPairs, setRemainingPairs] = useState(numOfPairs);
 
   const checkGuess = (id: string, guess: Card) => {
     if (!firstGuess) {
@@ -48,8 +49,8 @@ export default function App() {
 
   const reset = () => {
     setScore(0)
-    setCards(scrambleNums(10))
-    setRemainingPairs(10);
+    setCards(scrambleNums(numOfPairs))
+    setRemainingPairs(numOfPairs);
   }
 
   return (
@@ -57,14 +58,14 @@ export default function App() {
       <h1 className="text-4xl p-2 font-bold">Memory Game</h1>
       <p>Paris Left: {remainingPairs !== 0 ? remainingPairs : 'Victory!'}</p>
       <p>Score: {score}</p>
-      <ul className="flex flex-wrap w-50 gap-2">
+      <ul className="grid grid-cols-4">
         {cards.map((guess) => {
           const { id, val, isMatched, isVisible } = guess;
 
           return (
             <li key={id}>
               <button
-                className="border px-2 w-10"
+                className={`border px-2 w-10 h-10 rounded  disabled:bg-emerald-400 ${isVisible ? 'bg-slate-100' : 'bg-slate-300'}`}
                 onClick={() => checkGuess(id, guess)}
                 disabled={isMatched}
               >
